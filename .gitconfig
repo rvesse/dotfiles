@@ -1,0 +1,31 @@
+[user]
+	email = rvesse@dotnetrdf.org
+	name = Rob Vesse
+[core]
+	excludesfile = /Users/rvesse/.gitignore_global
+	editor = vim
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[push]
+	default = upstream
+[merge]
+	tool = kdiff3
+
+[alias]
+	graph = log --oneline --pretty=format:'%C(auto)[%h] -%d %an %C(magenta)%cr%C(reset): %C(auto) %s' --abbrev-commit --all --graph --decorate --color
+	bgraph = log --oneline --pretty=format:'%C(auto)[%h] -%d %an %C(magenta)%cr%C(reset): %C(auto) %s' --abbrev-commit --graph --decorate --color
+	ll = log --pretty=format:'%C(auto)[%h] -%d %an %C(magenta)%cr%C(reset): %C(auto) %s' --decorate --numstat
+	ls = log --pretty=format:'%C(auto)[%h] -%d %an %C(magenta)%cr%C(reset): %C(auto) %s' --decorate
+	cstatus = status .
+	tagcommit = !sh -c 'git rev-list $0 | head -n 1'
+        compare = !sh -c 'git log $0 ^$1 --no-merges'
+	rcompare = !sh -c 'git log $0 ^origin/$0 --no-merges'
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[status]
+	displayCommentPrefix = 1
