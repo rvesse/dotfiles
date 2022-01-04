@@ -1,15 +1,9 @@
 [user]
-	email = rvesse@dotnetrdf.org
 	name = Rob Vesse
+	signingkey = 3EC8F577DCE417F3
 [core]
 	excludesfile = /Users/rvesse/.gitignore_global
 	editor = vim
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
 [push]
 	default = upstream
 [merge]
@@ -29,3 +23,8 @@
 	smudge = git-media-smudge %f
 [status]
 	displayCommentPrefix = 1
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
