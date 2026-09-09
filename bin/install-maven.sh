@@ -17,7 +17,7 @@ echo "INFO: Attempting to install Maven ${MAVEN_VERSION}"
 function download() {
   set -e
   TAR_FILE=apache-maven-${MAVEN_VERSION}.tar.gz
-  curl https://www-us.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz > ${TAR_FILE}
+  curl https://downloads.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz > ${TAR_FILE}
   tar -xvf ${TAR_FILE} --directory ${INSTALL_TARGET}/
   rm ${TAR_FILE}
   set +e

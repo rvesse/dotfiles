@@ -1,12 +1,5 @@
-
-# Force Java processes to be headless
-#export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
-
 # CLI Colour Output
 export CLICOLOR=1
-
-# Source main profile
-source ~/.profile
 
 # Alias sha1
 alias sha1="/usr/bin/openssl sha1"
@@ -26,10 +19,51 @@ source ~/bin/ec2.sh
 alias use-ec2key-personal="ec2key /Users/rvesse/Dropbox/Personal/Keys/dotNetRDF-EC2.pem"
 alias use-ec2key-work="ec2key /Users/rvesse/Dropbox/Personal/Keys/Work-EC2.pem"
 
+# Aliases for K8S
+alias k=kubectl
+alias kwhat="alias | grep kubectl"
+alias kami="kubectl config current-context | xargs kubectl config get-contexts"
+alias kuse="kubectl config use-context"
+alias kl="kubectl logs -f"
+alias kpf="kubectl port-forward"
+alias kd="kubectl describe"
+alias kp="kubectl get pods"
+alias kdy="kubectl get deployment"
+alias ktell=kubeDecodeSecret
+alias kdown="kubectl scale --replicas=0"
+alias kup="kubectl scale --replicas=1"
+alias kimages=kubeImageList
+
+function kubeDecodeSecret() {
+  local FIELD=$1
+  shift
+
+  kubectl get secrets -o jsonpath="{.data.${FIELD}}" $* | base64 -d
+}
+
+function kubeImageList() {
+  local NAMESPACE=$1
+  local NAMESPACE_ARG="-n"
+  if [ -z "${NAMESPACE}" ]; then
+    NAMESPACE_ARG="--all-namespaces"
+  fi 
+  
+  kubectl get pods ${NAMESPACE_ARG} ${NAMESPACE} -o jsonpath="{.items[*].spec['containers'][*].image}" | tr -s '[[:space:]]' '\n' | sort | uniq -c
+}
+
+# AWS SSO Profile
+export AWS_PROFILE=telicent
+
+# AWS CodeArtifact Support
+source ~/bin/loginToCodeArtifact.sh
+
+# Font Awesome API Key
+export FONTAWESOME_API_KEY="A5005B52-182A-46A0-ABBD-8A49E1EE758C"
+
 # Alias for switching Java versions
 
 function switchJava() {
-  JVM_VERSION=${1:-7}
+  local JVM_VERSION=${1:-7}
 
   if [ "${JVM_VERSION}" -lt 9 ]; then
     export JAVA_HOME=`/usr/libexec/java_home -v 1.${JVM_VERSION}`
@@ -39,7 +73,16 @@ function switchJava() {
   echo "Current JAVA_HOME is ${JAVA_HOME}"
 }
 alias usejava=switchJava
-switchJava 11
+switchJava 21
+
+# Alias for Maven releases
+alias mvn-release=~/bin/createMavenRelease.sh
+
+# Alias for Maven Quick build
+alias mvn-quick="mvn clean install -DskipTests -Dcyclonedx.skip -Dgpg.skip"
+
+# Alias for Maven build plan
+alias mvn-do-what="mvn fr.jcgay.maven.plugins:buildplan-maven-plugin:list-phase"
 
 # Enable rvm ignoring the crap it spits out every time complaining about incorrect PATH
 rvm use 1>/dev/null 2>/dev/null
@@ -88,13 +131,25 @@ function gitLargeObjects() {
 
 alias git-large=gitLargeObjects
 
+function elasticCurl() {
+  local URL=$1 
+  shift
+  curl -vvv -H "Accept: application/json" -H "Content-Type: application/json" "$@" http://localhost:9200${URL}
+}
+
+alias es-curl=elasticCurl 
+
+# Whitespace alias
+alias whitespace="sed 's/ /·/g;s/\t/￫/g;s/\r/§/g;s/$/¶/g'"
+
 # GPG Enablement
 export GPG_TTY=$(tty)
+
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
 [[ -s "/Users/rvesse/.gvm/bin/gvm-init.sh" ]] && source "/Users/rvesse/.gvm/bin/gvm-init.sh"
 
-PATH="$PATH:/Users/rvesse/Documents/Apps/apache-maven/bin"
+PATH="/opt/homebrew/opt/gnu-getopt/bin:$PATH:/Users/rvesse/Documents/Apps/apache-maven/bin:/Users/rvesse/.npm/bin"
 
 export PATH
 

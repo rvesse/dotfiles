@@ -1,9 +1,11 @@
 [user]
 	name = Rob Vesse
-	signingkey = 3EC8F577DCE417F3
+	signingkey = /Users/rvesse/.ssh/id_rsa.pub
+	email = rob.vesse@telicent.io
 [core]
 	excludesfile = /Users/rvesse/.gitignore_global
 	editor = vim
+
 [push]
 	default = upstream
 [merge]
@@ -28,3 +30,11 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[init]
+	defaultBranch = main
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = /Users/rvesse/.config/git/allowed_signers
